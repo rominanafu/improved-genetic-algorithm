@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import random
+import time
+import datetime
 
 def dist_sites(x, y):
     """ Distance between two sites """
@@ -349,8 +351,10 @@ def globalSearch(individual):
 
     return new_ind
 
-def geneticAlgorithm(populationSize, cRate, mRate, Lm, generations):
+def geneticAlgorithm(populationSize, cRate, mRate, Lm, generations, dt, instance):
     """ Genetic algorithm framework """
+
+    results = pd.DataFrame(columns = ['Generation No.', 'Best Evaluation', 'Helicopters used', 'Comp time (ms)'])
 
     # Initial population
     population = initialization(populationSize)
@@ -373,6 +377,8 @@ def geneticAlgorithm(populationSize, cRate, mRate, Lm, generations):
     for _ in range(generations):
 
         print(f"Processing generation {_+1}...")
+
+        gen_start_time = time.process_time()
         
         # Exploitation
         for i in range(populationSize):
@@ -415,9 +421,17 @@ def geneticAlgorithm(populationSize, cRate, mRate, Lm, generations):
         
         print(f"Best evaluation iteration {_+1}: {bestEval}")
 
+        gen_end_time = time.process_time() * 1000
+
+        # Save info of generation
+        results.loc[len(results)] = [int(_+1), round(bestEval, 4), int(len(bestInd)), round(gen_end_time-gen_start_time, 4)]
+
+    # Save metrics
+    results.to_csv(f'results/IGA_{instance}_{dt}.csv', index=False)
+
     return bestInd, bestEval
 
-def drawSol(individual):
+def drawSol(individual, populationSize, cRate, mRate, Lm, generations, dt, instance):
 
     x = [i for i,j in coord]
     y = [j for i,j in coord]
@@ -426,10 +440,15 @@ def drawSol(individual):
     plt.scatter(x[0], y[0], color='r')
     for path in individual:
         plt.plot([x[p] for p in path], [y[p] for p in path])
+    plt.title(rf'IGA instance {instance} ($pS={populationSize}, cR={cRate}, mR={mRate}, Lm={Lm}, gen={generations}$)')
 
+    # Save plot
+    plt.savefig(f'figures/IGA_{dt}.png')
+
+    # Plot solution
     plt.show()
 
-def solution(data_path, hcap):
+def solution(data_path, hcap, instance):
     global coord, tws, st, demand, hcapacity, travelTime
 
     data = pd.read_csv(data_path)
@@ -440,10 +459,11 @@ def solution(data_path, hcap):
     demand = data['DEMAND']
     hcapacity = hcap
     travelTime = 0
+    dt = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    bestInd, bestEval = geneticAlgorithm(populationSize=100, cRate=0.7, mRate=0.3, Lm=10, generations=25)
+    bestInd, bestEval = geneticAlgorithm(populationSize=100, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance)
 
     print(f"Best evaluation: {bestEval}")
     print(bestInd)
 
-    drawSol(bestInd)
+    drawSol(bestInd, populationSize=100, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance)

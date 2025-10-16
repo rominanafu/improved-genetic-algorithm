@@ -11,8 +11,9 @@ for i in range(len(tests)):
     ans = input(f"\nRun Solomon {t} tests? [y/n]: ")
     if (ans.lower() == 'y'):
         files_path = glob(f'data/solomon_dataset/{t}/*.csv')
-        for j in range(1, len(files_path)+1):
+        for j in range(len(files_path)):
             path = files_path[j]
-            ans = input(f"\nRun {t}{j:02d} instance? [y/n]: ")
+            instance = f'{t}{j+1:02d}'
+            ans = input(f"\nRun {instance} instance? [y/n]: ")
             if (ans.lower() == 'y'):
-                solution(path, cap)
+                solution(path, cap, instance)
