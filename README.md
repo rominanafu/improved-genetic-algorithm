@@ -1,2 +1,3 @@
 # improved-genetic-algorithm
-Reproducicción de los resultados del artículo "An improved genetic algorithm for solving the helicopter routing problem with time window in post-disaster rescue" y propuesta de mejora.
+
+El artículo ["An improved genetic algorithm for solving the helicopter routing problem with time window in post-disaster rescue"](https://www.aimspress.com/article/doi/10.3934/mbe.2023699) discute el problema de ruteo de vehículos con ventanas de tiempo (VRPTW) con el fin de diseñar rutas para helicópteros en operaciones de rescate posteriores a un desastre. Para ello, se propuso la implementación de un algoritmo genético mejorado, en donde se implementa una búsqueda local y global para la mejora de la explotación y la explotación respectivamente, además de una estrategia de inicialización cooperativa para una alta calidad y diversidad en la población inicial.
