@@ -447,8 +447,3 @@ def solution(data_path, hcap):
     print(bestInd)
 
     drawSol(bestInd)
-
-########## CASO 1: Clustered Customers, Short Schedule Horizon ###########
-
-solution('data/solomon_dataset/C1/C101.csv', 200)
-
