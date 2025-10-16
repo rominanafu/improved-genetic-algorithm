@@ -443,7 +443,7 @@ def drawSol(individual, populationSize, cRate, mRate, Lm, generations, dt, insta
     plt.title(rf'IGA instance {instance} ($pS={populationSize}, cR={cRate}, mR={mRate}, Lm={Lm}, gen={generations}$)')
 
     # Save plot
-    plt.savefig(f'figures/IGA_{dt}.png')
+    plt.savefig(f'figures/IGA_{instance}_{dt}.png')
 
     # Plot solution
     plt.show()
