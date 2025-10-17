@@ -619,7 +619,7 @@ def drawSol(individual, cRate, mRate, Lm, generations, dt, instance, algo):
     plt.scatter(x[0], y[0], color='r')
     for path in individual:
         plt.plot([x[p] for p in path], [y[p] for p in path])
-    plt.title(rf'IGA instance {instance} ($pS={populationSize}, cR={cRate}, mR={mRate}, Lm={Lm}, gen={generations}$)')
+    plt.title(rf'{algo} instance {instance} ($pS={populationSize}, cR={cRate}, mR={mRate}, Lm={Lm}, gen={generations}$)')
 
     # Save plot
     plt.savefig(f'figures/{algo}_{instance}_{dt}.png')
@@ -631,13 +631,13 @@ def solution_IGA(initialPopulation, dt, instance):
     bestInd, bestEval = geneticAlgorithm_IGA(population=initialPopulation, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance)
     print(f"Best evaluation: {bestEval}")
     print(bestInd)
-    drawSol(bestInd, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance, algo={'IGA'})
+    drawSol(bestInd, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance, algo='IGA')
 
 def solution_IGAm(initialPopulation, dt, instance):
     bestInd, bestEval = geneticAlgorithm_IGAm(population=initialPopulation, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance)
     print(f"Best evaluation: {bestEval}")
     print(bestInd)
-    drawSol(bestInd, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance, algo={'IGAm'})
+    drawSol(bestInd, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance, algo='IGAm')
 
 def solution(data_path, hcap, instance):
     global coord, tws, st, demand, hcapacity, travelTime, populationSize
