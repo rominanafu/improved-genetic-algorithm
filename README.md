@@ -37,7 +37,7 @@ A este algoritmo se le añaden las siguientes modificaciones, con el fin de mejo
     * **RC1:** Combinación de clientes aleatorios y clientes agrupados, horizonte de cronograma corto
     * **RC2:** Combinación de clientes aleatorios y clientes agrupados, horizonte de cronograma largo
 
-    Las mejores soluciones encontradas se encuentran en el siguiente [link](https://www.sintef.no/projectweb/top/vrptw/100-customers).
+    Las mejores soluciones conocidas se encuentran en el siguiente [link](https://www.sintef.no/projectweb/top/vrptw/100-customers).
 
 * [*Improved Genetic Algorithm (IGA)*](/src/IGA.py)
 
