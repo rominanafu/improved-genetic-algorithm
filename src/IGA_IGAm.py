@@ -75,58 +75,66 @@ def initialization(populationSize):
         sites.append(Site(i, demand[i], tws[i], coord[i], st[i]))
     
     sites.sort(key=lambda x:x.tws[0])
-    individual = []
-    capacities = []
-    times = []
+    rcenters = []
     for j in sites:
-        # different options for inserting it
-        helicopter = -1
-        min_pos = np.inf
-        for k in range(len(individual)):
-            # check if it can be inserted into helicopter k
-            if capacities[k] + j.demand <= hcapacity and max(times[k], j.tws[0]) <= j.tws[1]:
-                if min_pos > len(individual[k]):
-                    min_pos = len(individual[k])
-                    helicopter = k
-        if helicopter == -1:
-            individual.append([0])
-            capacities.append(0)
-            times.append(0)
-            helicopter = len(individual)-1
-        # update helicopter where j is going to be inserted
-        individual[helicopter].append(j.index)
-        capacities[helicopter] += j.demand
-        times[helicopter] = max(times[helicopter], j.tws[0]) + j.st
-    for k in range(len(individual)):
-        individual[k].append(0)
+        rcenters.append(j.index)
+    
+    individual = []
+    for site in rcenters:
+        # Find feasible positions to insert site
+        pos = []
+        for i in range(len(individual)):
+            helicopter = individual[i]
+            for j in range(1, len(helicopter)):
+                if (trayFactible(helicopter[:j] + [site] + helicopter[j:])):
+                    pos.append([i, j])
+
+        # Insert site
+        if (len(pos) == 0): # New helicopter path
+            individual.append([0, site, 0])
+        else: # Select best position to insert site (minimizing distance)
+            bestPos = 0
+            bestDist = (dist_sites(individual[pos[0][0]][pos[0][1]], site) +
+                        dist_sites(individual[pos[0][0]][pos[0][1]-1], site))
+            for i in range(1, len(pos)):
+                x, y = pos[i]
+                dist = dist_sites(individual[x][y], site) + dist_sites(individual[x][y-1], site)
+                if (dist < bestDist):
+                    bestDist = dist
+                    bestPos = i
+            individual[pos[bestPos][0]].insert(pos[bestPos][1], site)
     
     res.append(individual)
     
     sites.sort(key=lambda x:x.dist_origin)
-    individual = []
-    capacities = []
-    times = []
+    rcenters = []
     for j in sites:
-        # different options for inserting it
-        helicopter = -1
-        min_pos = np.inf
-        for k in range(len(individual)):
-            # check if it can be inserted into helicopter k
-            if capacities[k] + j.demand <= hcapacity and max(times[k], j.tws[0]) <= j.tws[1]:
-                if min_pos > len(individual[k]):
-                    min_pos = len(individual[k])
-                    helicopter = k
-        if helicopter == -1:
-            individual.append([0])
-            capacities.append(0)
-            times.append(0)
-            helicopter = len(individual)-1
-        # update helicopter where j is going to be inserted
-        individual[helicopter].append(j.index)
-        capacities[helicopter] += j.demand
-        times[helicopter] = max(times[helicopter], j.tws[0]) + j.st
-    for k in range(len(individual)):
-        individual[k].append(0)
+        rcenters.append(j.index)
+    
+    individual = []
+    for site in rcenters:
+        # Find feasible positions to insert site
+        pos = []
+        for i in range(len(individual)):
+            helicopter = individual[i]
+            for j in range(1, len(helicopter)):
+                if (trayFactible(helicopter[:j] + [site] + helicopter[j:])):
+                    pos.append([i, j])
+
+        # Insert site
+        if (len(pos) == 0): # New helicopter path
+            individual.append([0, site, 0])
+        else: # Select best position to insert site (minimizing distance)
+            bestPos = 0
+            bestDist = (dist_sites(individual[pos[0][0]][pos[0][1]], site) +
+                        dist_sites(individual[pos[0][0]][pos[0][1]-1], site))
+            for i in range(1, len(pos)):
+                x, y = pos[i]
+                dist = dist_sites(individual[x][y], site) + dist_sites(individual[x][y-1], site)
+                if (dist < bestDist):
+                    bestDist = dist
+                    bestPos = i
+            individual[pos[bestPos][0]].insert(pos[bestPos][1], site)
     
     res.append(individual)
 
