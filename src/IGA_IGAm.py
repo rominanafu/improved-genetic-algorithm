@@ -537,9 +537,9 @@ def globalSearch_IGAm(individual):
 
     return new_ind
 
-def geneticAlgorithm_IGAm(population, cRate, mRate, Lm, generations, dt, instance):
-    current_temperature = 1000  # Temperatura inicial
-    alpha = 0.90      # Factor de decaimiento de temperatura
+def geneticAlgorithm_IGAm(population, cRate, mRate, Lm, generations, dt, instance, initial_T, cooling):
+    current_temperature = initial_T # Temperatura inicial
+    alpha = cooling # Factor de decaimiento de temperatura
 
     """ Genetic algorithm framework """
 
@@ -582,7 +582,8 @@ def geneticAlgorithm_IGAm(population, cRate, mRate, Lm, generations, dt, instanc
             newIndividual = repair(newIndividual)
 
             eval = evaluation(newIndividual)
-            if (eval < evals[i]) or random.random() < np.exp(-(eval-evals[i])/current_temperature):
+            # Update if new solution improves or if it should be explored by using SA
+            if eval < evals[i] or random.random() < np.exp(-(eval-evals[i])/current_temperature):
                 population[i] = newIndividual
                 evals[i] = eval
                 lastImprov[i] = 0
@@ -609,6 +610,7 @@ def geneticAlgorithm_IGAm(population, cRate, mRate, Lm, generations, dt, instanc
                     bestEval = eval
                     bestInd = newIndividual
         
+        # Update temperature
         current_temperature *= alpha
         print(f"Best evaluation iteration {_+1}: {bestEval}")
 
@@ -646,7 +648,7 @@ def solution_IGA(initialPopulation, dt, instance):
     drawSol(bestInd, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance, algo='IGA')
 
 def solution_IGAm(initialPopulation, dt, instance):
-    bestInd, bestEval = geneticAlgorithm_IGAm(population=initialPopulation, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance)
+    bestInd, bestEval = geneticAlgorithm_IGAm(population=initialPopulation, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance, initial_T=1000, cooling=0.90)
     print(f"Best evaluation: {bestEval}")
     print(bestInd)
     drawSol(bestInd, cRate=0.7, mRate=0.3, Lm=10, generations=25, dt=dt, instance=instance, algo='IGAm')
