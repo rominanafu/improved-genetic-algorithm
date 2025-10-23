@@ -538,6 +538,9 @@ def globalSearch_IGAm(individual):
     return new_ind
 
 def geneticAlgorithm_IGAm(population, cRate, mRate, Lm, generations, dt, instance):
+    current_temperature = 1000  # Temperatura inicial
+    alpha = 0.90      # Factor de decaimiento de temperatura
+
     """ Genetic algorithm framework """
 
     results = pd.DataFrame(columns = ['Generation No.', 'Best Evaluation', 'Helicopters used', 'Comp time (ms)'])
@@ -579,7 +582,7 @@ def geneticAlgorithm_IGAm(population, cRate, mRate, Lm, generations, dt, instanc
             newIndividual = repair(newIndividual)
 
             eval = evaluation(newIndividual)
-            if (eval < evals[i]):
+            if (eval < evals[i]) or random.random() < np.exp(-(eval-evals[i])/current_temperature):
                 population[i] = newIndividual
                 evals[i] = eval
                 lastImprov[i] = 0
@@ -606,6 +609,7 @@ def geneticAlgorithm_IGAm(population, cRate, mRate, Lm, generations, dt, instanc
                     bestEval = eval
                     bestInd = newIndividual
         
+        current_temperature *= alpha
         print(f"Best evaluation iteration {_+1}: {bestEval}")
 
         gen_end_time = time.process_time() * 1000
