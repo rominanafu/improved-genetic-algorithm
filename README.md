@@ -4,8 +4,9 @@ El artículo ["An improved genetic algorithm for solving the helicopter routing 
 
 A este algoritmo se le añaden las siguientes modificaciones, con el fin de mejorar su convergencia:
 
-* 
-* 
+* Justo antes de iniciar el ciclo evolutivo, se añadieron parámetros de enfriamiento inspirados en Simulated Annealing (SA).
+* Se sustituyó el criterio determinista “mejor-reemplaza-peor” por un criterio de aceptación probabilística, manteniendo la comparación original y añadiendo una segunda vía probabilística para el caso de soluciones peores.
+* Al término de cada iteración del algoritmo genético la temperatura se reduce multiplicándola por $\alpha$.
 
 ## Instalación y ejecución ⚙️
 
